@@ -5,7 +5,7 @@ name: CI - Fetch latest data.
 # Controls when the action will run. 
 on:
   # Triggers the workflow on push or pull request events but only for the master branch
-  # Run everyday at 8:45am UTC
+  # Run everyday at 9:15am UTC
   schedule:
     - cron:  '15 9 * * *'
 
