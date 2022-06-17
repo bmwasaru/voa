@@ -6,9 +6,21 @@ import csv
 
 URL = "https://www.voaswahili.com/"
 
+# current date
+current_date = datetime.today().strftime("%d-%m-%y")
+
 page = requests.get(URL)
 soup = BeautifulSoup(page.content, "html.parser")
 home_page_links = []
+headline_title_list = []
+
+for headline_title in soup.find_all("h4", class_="media-block__title"):
+    headline_title_list.append(headline_title.get_text())
+    
+   
+with open(f'datasets/{current_date}.csv', 'a') as csvfile:
+    writer= csv.writer(csvfile, delimiter='\n')
+    writer.writerow(headline_title_list)
 
 for a_href in soup.find_all("a", href=True, class_="img-wrap"):
     if a_href["href"].startswith('/a/'):
