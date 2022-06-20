@@ -1,5 +1,5 @@
 git pull
-python scripts/daily_headlines.py
+python scripts/get_news.py
 git status
 git add .
 git commit -am "Local run"
