@@ -42,7 +42,7 @@ jobs:
           git add .
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git commit -m "Add daily headlines content" -a
+          git commit -m "Add daily news content" -a
         
       - name: GitHub Push
         # You may pin to the exact commit or the version.
