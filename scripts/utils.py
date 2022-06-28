@@ -28,11 +28,11 @@ class VoaSwahili():
             if a_href["href"].startswith('/a/'):
                 self.page_links.append("https://www.voaswahili.com"+a_href["href"])
 
-    def get_page_content(self):
+    def get_page_content(self, content_class):
         for link in self.page_links:
             page = requests.get(link)
             soup = BeautifulSoup(page.content, "html.parser")
-            page_paragraph = soup.find_all('div', class_="content-floated-wrap fb-quotable")
+            page_paragraph = soup.find_all('div', class_=content_class)
             for paragraph in page_paragraph:
                 paragraph_list = paragraph.get_text().splitlines()
                 

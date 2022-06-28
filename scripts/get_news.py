@@ -18,4 +18,8 @@ news_links = {
 for k, v in news_links.items():
     news = VoaSwahili(v, k)
     news.get_page_headlines()
-    news.get_page_content()
+    news.get_page_content(content_class="content-floated-wrap fb-quotable")
+
+
+special_news = VoaSwahili("https://www.voaswahili.com/makala-maalum", "makala-maalum")
+special_news.get_page_content(content_class="fa-container")
