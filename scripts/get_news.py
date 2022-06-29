@@ -21,6 +21,6 @@ for k, v in news_links.items():
     news.get_page_content(content_class="content-floated-wrap fb-quotable")
 
 
-# special_news = VoaSwahili("https://www.voaswahili.com/makala-maalum", "makala-maalum")
-# special_news.get_page_headlines()
-# special_news.get_page_content(content_class="container container--featured m-t-md")
+special_news = VoaSwahili("https://www.voaswahili.com/makala-maalum", "makala-maalum")
+special_news.get_page_headlines()
+special_news.get_page_content(content_class="container container--featured m-t-md")
