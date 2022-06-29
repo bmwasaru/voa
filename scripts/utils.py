@@ -27,6 +27,9 @@ class VoaSwahili():
         for a_href in soup.find_all("a", href=True, class_="img-wrap"):
             if a_href["href"].startswith('/a/'):
                 self.page_links.append("https://www.voaswahili.com"+a_href["href"])
+            else:
+                self.page_links.append(a_href['href'])
+
 
     def get_page_content(self, content_class):
         for link in self.page_links:
