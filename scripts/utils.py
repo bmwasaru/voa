@@ -20,7 +20,7 @@ class VoaSwahili():
             page_title_list.append(headline_title.get_text())
     
    
-        with open(f'datasets/{self.sub_folder}/{self.current_date}.csv', 'a') as csvfile:
+        with open(f'sentences/{self.sub_folder}/{self.current_date}.csv', 'a') as csvfile:
             writer= csv.writer(csvfile, delimiter='\n')
             writer.writerow(page_title_list)
 
@@ -56,7 +56,7 @@ class VoaSwahili():
                 # make everything a flat nested list, for purposes of saving to csv
                 list_of_list = [[string] for string in flat_list]
                     
-                with open(f'./datasets/{self.sub_folder}/{self.current_date}.csv', 'a', newline='') as csvfile:
+                with open(f'./sentences/{self.sub_folder}/{self.current_date}.csv', 'a', newline='') as csvfile:
                     writer= csv.writer(csvfile, delimiter=' ')
                     writer.writerows(list_of_list)
 
