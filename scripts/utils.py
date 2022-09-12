@@ -44,7 +44,7 @@ class VoaSwahili():
                     paragraph_list.remove("")
                     
                 # split at fullstops
-                nested_list = [string.split(". ") for string in paragraph_list]
+                nested_list = [string.split(".") for string in paragraph_list]
                 
                 # flatten the now nested list
                 flat_list = [nest for sublist in nested_list for nest in sublist]
