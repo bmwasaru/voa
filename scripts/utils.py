@@ -20,7 +20,7 @@ class VoaSwahili():
             page_title_list.append(headline_title.get_text())
     
    
-        with open(f'sentences/{self.sub_folder}/{self.current_date}.csv', 'a') as csvfile:
+        with open(f'sentences/{self.current_date}.csv', 'a') as csvfile:
             writer= csv.writer(csvfile, delimiter='\n')
             writer.writerow(page_title_list)
 
