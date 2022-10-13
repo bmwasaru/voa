@@ -1,5 +1,6 @@
 from bs4 import BeautifulSoup
 import requests
+from requests.adapters import ConnectionError
 import csv
 from datetime import datetime
 
@@ -31,30 +32,34 @@ class VoaSwahili():
     def get_page_content(self, content_class):
         for link in self.page_links:
             print(link)
-            page = requests.get(link)
-            soup = BeautifulSoup(page.content, "html.parser")
-            page_paragraph = soup.find_all('div', class_=content_class)
-            for paragraph in page_paragraph:
-                paragraph_list = paragraph.get_text().splitlines()
-                
-                # remove empty strings from list
-                while("" in paragraph_list) :
-                    paragraph_list.remove("")
+            try: 
+                page = requests.get(link)
+                soup = BeautifulSoup(page.content, "html.parser")
+                page_paragraph = soup.find_all('div', class_=content_class)
+                for paragraph in page_paragraph:
+                    paragraph_list = paragraph.get_text().splitlines()
                     
-                # split at fullstops
-                nested_list = [string.split(".") for string in paragraph_list]
-                
-                # flatten the now nested list
-                flat_list = [nest for sublist in nested_list for nest in sublist]
-                
-                # remove empty strings from list
-                while("" in flat_list) :
-                    flat_list.remove("")
+                    # remove empty strings from list
+                    while("" in paragraph_list) :
+                        paragraph_list.remove("")
+                        
+                    # split at fullstops
+                    nested_list = [string.split(".") for string in paragraph_list]
                     
-                # make everything a flat nested list, for purposes of saving to csv
-                list_of_list = [[string] for string in flat_list]
+                    # flatten the now nested list
+                    flat_list = [nest for sublist in nested_list for nest in sublist]
                     
-                with open(f'./sentences/{self.current_date}.csv', 'a', newline='') as csvfile:
-                    writer= csv.writer(csvfile, delimiter=' ')
-                    writer.writerows(list_of_list)
+                    # remove empty strings from list
+                    while("" in flat_list) :
+                        flat_list.remove("")
+                        
+                    # make everything a flat nested list, for purposes of saving to csv
+                    list_of_list = [[string] for string in flat_list]
+                        
+                    with open(f'./sentences/{self.current_date}.csv', 'a', newline='') as csvfile:
+                        writer= csv.writer(csvfile, delimiter=' ')
+                        writer.writerows(list_of_list)
+            except ConnectionError:
+                print("CONNECTION ERROR!!!!") 
+            
 
