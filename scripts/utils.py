@@ -39,8 +39,8 @@ class VoaSwahili():
                 for paragraph in page_paragraph:
                     paragraph_list = paragraph.get_text().splitlines()
                     
-                    # remove empty strings from list
-                    while("" in paragraph_list) :
+                    # remove these items from list strings from list
+                    while("" in paragraph_list):
                         paragraph_list.remove("")
                         
                     # split at fullstops
@@ -48,10 +48,13 @@ class VoaSwahili():
                     
                     # flatten the now nested list
                     flat_list = [nest for sublist in nested_list for nest in sublist]
-                    
-                    # remove empty strings from list
-                    while("" in flat_list) :
-                        flat_list.remove("")
+
+                    # remove some words, spaces from the flat_list
+                    to_be_removed_from_list = [" ", "", "Facebook Forum", "live\nDuniani Leo Video Tube", "Duniani Leo"]
+                    for i in flat_list:
+                        for to_remove in to_be_removed_from_list:
+                            if to_remove in flat_list:
+                                flat_list.remove(to_remove)
                         
                     # make everything a flat nested list, for purposes of saving to csv
                     list_of_list = [[string] for string in flat_list]
