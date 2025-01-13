@@ -18,6 +18,7 @@ class VoaSwahili():
             "comments powered by Disqus.", "Embed", "share", "The code has been copied to your clipboard.", "The URL has been copied to your clipboard",
             "Shirikiana kwenye Facebook", "Shirikiana kwenye Twitter", "No media source currently available",
             "0:00", "0:03:06", "Kiungo cha moja kwa moja", "16 kbps | MP3", "32 kbps | MP3", "48 kbps | MP3", "Pleya",
+            "live Duniani Leo Video Tube", "by VOA Swahili - Idhaa ya Kiswahili ya Sauti ya Amerika", "Duniani Leo\n"
         ]
 
     def get_page_headlines(self):
