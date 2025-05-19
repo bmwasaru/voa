@@ -18,7 +18,8 @@ class VoaSwahili():
             "comments powered by Disqus.", "Embed", "share", "The code has been copied to your clipboard.", "The URL has been copied to your clipboard",
             "Shirikiana kwenye Facebook", "Shirikiana kwenye Twitter", "No media source currently available",
             "0:00", "0:03:06", "Kiungo cha moja kwa moja", "16 kbps | MP3", "32 kbps | MP3", "48 kbps | MP3", "Pleya",
-            "live \nDuniani Leo Video Tube", "by VOA Swahili - Idhaa ya Kiswahili ya Sauti ya Amerika", "Duniani Leo\n"
+            "live \nDuniani Leo Video Tube", "by VOA Swahili - Idhaa ya Kiswahili ya Sauti ya Amerika", "Duniani Leo\n", "Duniani Leo", "VOA Express",
+            "Jioni", "Alfajiri", "Kwa Undani"
         ]
 
     def get_page_headlines(self):
@@ -29,7 +30,7 @@ class VoaSwahili():
         for headline_title in soup.find_all("h4", class_="media-block__title"):
             page_title_list.append(headline_title.get_text())
     
-   
+        # do we need to store page titles? getting redundant text like "Duniani Leo in the csv files"
         with open(f'sentences/{self.current_date}.csv', 'a') as csvfile:
             writer= csv.writer(csvfile, delimiter='\n')
             writer.writerow(page_title_list)
