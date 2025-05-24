@@ -1,10 +1,12 @@
 import re
+import subprocess
 from bs4 import BeautifulSoup
 import requests
 from requests.adapters import ConnectionError
 import csv
 from datetime import datetime
 import logging
+import wordcloud
 
 
 class VoaSwahili():
@@ -37,6 +39,10 @@ class VoaSwahili():
 
         for a_href in soup.find_all("a", href=True, class_="img-wrap"):
             self.page_links.append("https://www.voaswahili.com"+a_href["href"])
+        
+        # remove the WhatsApp link
+        link_to_remove = "https://www.voaswahili.comhttps://whatsapp.com/channel/0029VaZ90hd4yltHi1G5da2x"
+        self.page_links = list(filter(lambda x: x != link_to_remove, self.page_links))
 
 
     def get_page_content(self, content_class):
@@ -72,6 +78,15 @@ class VoaSwahili():
                         writer= csv.writer(csvfile, delimiter=' ')
                         writer.writerows(list_of_list)
             except ConnectionError:
-                logging.error(f"CONNECTION ERROR: {link}") 
+                logging.error(f"CONNECTION ERROR: {link}")
+
+    def generate_word_count_image(self):
+        # generate word count from the list of words and save with current date as name i.e current_date.png
+        genereate_command = f"wordcloud_cli --text sentences/{self.current_date}.csv --imagefile word_clouds/{self.current_date}.png"
+
+        try:
+            subprocess.run(genereate_command, shell=True)
+        except subprocess.CalledProcessError as e:
+            logging.error(f"Command failed to generate word cloud with exit code {e.returncode}")
             
 
