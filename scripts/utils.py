@@ -16,7 +16,7 @@ class VoaSwahili:
     """
     Scrape VOA Swahili article pages and save clean sentences to a daily CSV file.
 
-    Output saved in a file with day's date:
+    Output remains compatible with the existing daily job:
         sentences/dd-mm-yy.csv
 
     Key fixes:
@@ -68,6 +68,9 @@ class VoaSwahili:
         "mubashara",
         "breaking news",
         "voa swahili",
+        "voa swahili audio tube",
+        "voa audio tube",
+        "audio tube",
         "matangazo",
         "video",
         "voa africa",
@@ -89,7 +92,8 @@ class VoaSwahili:
 
     NOISE_PATTERNS = [
         re.compile(r"^by\s+VOA\s+Swahili", re.I),
-        re.compile(r"^by\s+VOA\s+Swahili\s+-\s+Idhaa", re.I),
+        re.compile(r"^by\s+VOA\s+Swahili\s*[-–—]\s*Idhaa", re.I),
+        re.compile(r"\bVOA\s+Swahili\s+Audio\s+Tube\b", re.I),
         re.compile(r"^\d{1,3}\s*kbps\s*\|\s*MP3$", re.I),
         re.compile(r"^\d{1,2}:\d{2}(?::\d{2})?$"),
         re.compile(r"^\d{1,2}:\d{2}(?::\d{2})?\s+\d{1,2}:\d{2}(?::\d{2})?(\s+\d{1,2}:\d{2}(?::\d{2})?)?$"),
@@ -259,6 +263,18 @@ class VoaSwahili:
         for tag in soup.find_all(class_=noisy_class_words):
             tag.decompose()
 
+        # Some VOA pages expose audio-widget labels as plain text nodes or
+        # headings rather than inside a reliably named `.audio` / `.player`
+        # container. Remove those blocks before paragraph extraction so strings
+        # such as "VOA Swahili Audio Tube" are not saved as corpus rows.
+        audio_label = re.compile(r"VOA\s+Swahili\s+Audio\s+Tube", re.I)
+        for tag in soup.find_all(string=audio_label):
+            parent = tag.parent
+            if parent and parent.name not in {"html", "body"}:
+                parent.decompose()
+            else:
+                tag.extract()
+
         return soup
 
     def is_article_url(self, url):
@@ -355,9 +371,18 @@ class VoaSwahili:
         return fallback_root.get_text("\n", strip=True).splitlines()
 
     def write_sentences(self, sentences):
+        """
+        Append cleaned sentences to today's CSV file.
+
+        Important: this method intentionally uses append mode (`a`), not write
+        mode (`w`). Therefore each article/category adds rows to the existing
+        daily CSV instead of recreating/replacing it.
+        """
         if not sentences:
             return
 
+        # `a` means append. Do not change this to `w`, because `w` would
+        # rewrite the CSV every time the scraper processes another article.
         with self.output_path.open("a", newline="", encoding="utf-8") as csvfile:
             writer = csv.writer(csvfile)
             for sentence in sentences:
@@ -366,13 +391,24 @@ class VoaSwahili:
                     writer.writerow([sentence])
 
     def get_page_content(self, content_class=None):
+        """
+        Scrape all article URLs collected from one category/listing page.
+
+        Sentences are collected first, then appended once at the end of this
+        category run. This avoids opening/recreating the file inside every
+        article loop while still appending to the same daily CSV.
+        """
+        category_sentences = []
+
         for link in self.page_links:
             try:
                 soup = self.fetch_soup(link)
                 raw_texts = self.extract_article_texts(soup, content_class=content_class)
-                sentences = self.clean_sentences(raw_texts)
-                self.write_sentences(sentences)
+                category_sentences.extend(self.clean_sentences(raw_texts))
             except RequestException as exc:
                 logging.error("CONNECTION ERROR: %s - %s", link, exc)
             except Exception as exc:
                 logging.exception("FAILED TO PROCESS: %s - %s", link, exc)
+
+        # Append this category's cleaned sentences to today's CSV.
+        self.write_sentences(category_sentences)

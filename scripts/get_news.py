@@ -10,6 +10,7 @@ logging.basicConfig(
 
 # Main VOA Swahili category and sub-category pages.
 # Output behavior:
+# - The scraper does NOT use one master CSV for all days.
 # - Each daily run writes/appends to that day's dated file only:
 #       sentences/dd-mm-yy.csv
 # - All categories scraped on the same day go into that same dated file.
