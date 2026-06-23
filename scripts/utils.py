@@ -16,7 +16,7 @@ class VoaSwahili:
     """
     Scrape VOA Swahili article pages and save clean sentences to a daily CSV file.
 
-    Output remains compatible with the existing daily job:
+    Output saved using the date of running:
         sentences/dd-mm-yy.csv
 
     Key fixes:
