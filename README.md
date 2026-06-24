@@ -10,4 +10,10 @@ This repo consists of a scraper for the Voice of America Swahili site and the sc
  ## Scraping
  This was done daily using github actions that can be viewed on the ```.github/workflows``` folder. The daily scrap was saved in a csv file with the day's date. You can see the scraping script and cleaning script in the ```scripts``` folder. Scraping could be done manual on you machine using the ```manual_push.sh``` script. This was necessary also for testing the script on the main and can push the resulting code and sentences to github.
 
+ ## Text normalization
+
+ I also used my kiswahili text normalization library [https://github.com/bmwasaru/kiswahili-speech-normalization] to normalized the cleaned sentences into a single text file ```normalized_corpus/normalized_corpus.txt``` with metadata saved in the ```normalized_corpus/normalized_corpus.csv``` file.
  
+ **Note**: The ```normalized_corpus/normalized_corpus.csv``` is too large (474MB) for Github so I ignored it in the ```.gitignore``` file. To generate it, run:
+
+ ```python scripts/normalize_text.py sentences_cleaned normalized_corpus/normalized_corpus.csv --profile asr```

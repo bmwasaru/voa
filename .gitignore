@@ -2,3 +2,6 @@ venv
 .DS_Store
 datasets/.DS_Store
 scripts/__pycache__/*
+kiswahili-speech-normalization/
+normalized_corpus/normalized_corpus.csv
+normalized_corpus/normalized_corpus.txt
